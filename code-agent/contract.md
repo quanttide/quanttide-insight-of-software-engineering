@@ -78,6 +78,20 @@ Flutter 项目一律要求按 Bloc 给的架构分层——**用框架的家法�
 
 **现状反例**：`qtcloud-work/studio` 处在第一阶段（`lib/` 按 Bloc 家法分层），本身不违规；但 `lib/repositories/local/` 里 `tasks.dart`、`workflows.dart` 是聚合名，`environment.dart`、`paths.dart`、`yaml.dart`、`prompts.dart`、`help.dart` 是职能名——**混用待清**：或按聚合重排，或明确归入职能子目录。
 
+### 两类模块并列：聚合与领域服务（2026-09-12）
+
+结构契约要允许同一层里并列三类模块，各有各的命名规矩（对齐社区惯例）：
+
+| 模块 | 判据 | 命名 | 例 |
+|---|---|---|---|
+| **聚合** | 有身份、有生命周期、有自己的一致性边界 | 业务名词 | `task/`、`workflow/`、`material/`、`workspace/` |
+| **领域服务** | 无身份、跨聚合、只做一件事（多为只读：查询、清点、检查） | 能力名词（名动同形） | `search/`、`catalog/`、`audit/` |
+| **适配器** | 边界外的东西（远端服务、平台差异） | 外部对象名 | `host/`、`fs/` |
+
+- **不造 `-er` 目录**：`-er`（Finder、Searcher、Reader）是**类名**惯例，不是目录名惯例——社区里没有拿 `searcher/` 当目录的；目录用能力名，`-er` 留给类（Fowler 的 Finder 模式、Lucene 的 `IndexSearcher`、Go 的 `io.Reader` 都是类/接口名）
+- **动词不是障碍**：`search`、`catalog`、`audit` 都是名动同形（a search 是名词），作目录名读作「这项能力」
+- **判据可查**：模块若没有身份与生命周期，就不是聚合——`search`、`catalog`、`audit` 都是跨工作区的只读能力，故为服务
+
 ### 结构契约：现场已有的条款
 
 | 条款 | 现场表述 | 出处 |
